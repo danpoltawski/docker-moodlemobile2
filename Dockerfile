@@ -25,4 +25,5 @@ WORKDIR /srv/
 RUN npm install
 RUN bower install --allow-root && npm rebuild node-sass
 EXPOSE 8100 35729
+VOLUME ["/srv"]
 CMD ["ionic", "serve"]

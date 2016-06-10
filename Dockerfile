@@ -1,6 +1,6 @@
 FROM node:0.12
 
-# set default java environment variable
+# Add Java..
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle/
 RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list && \
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 &&  \
@@ -10,7 +10,19 @@ apt-get update && \
 apt-get install -y --no-install-recommends oracle-java8-installer && \
 apt-get install -y --no-install-recommends apt-utils oracle-java8-set-default
 
+# Install cordova and ionic
 RUN npm install -g cordova && npm install -g ionic
 
+# Install some moodlemobile2 defaults
 RUN apt-get install -y rubygems && gem install sass && npm install -g node-sass
 RUN npm install -g bower gulp
+
+# Put moodlemobile2 in /srv (this is probably better to be mounted from host, but in
+# my testing the mounting system wasn't playing nice with watch.
+RUN  curl -SLO https://github.com/moodlehq/moodlemobile2/archive/v3.1.0.tar.gz && \
+tar -xzf v3.1.0.tar.gz -C /srv --strip-components 1
+WORKDIR /srv/
+RUN npm install
+RUN bower install --allow-root && npm rebuild node-sass
+EXPOSE 8100 35729
+CMD ["ionic", "serve"]

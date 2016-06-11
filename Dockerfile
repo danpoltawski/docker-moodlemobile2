@@ -18,7 +18,8 @@ RUN apt-get install -y rubygems && gem install sass && npm install -g node-sass
 RUN npm install -g bower gulp
 
 # Put moodlemobile2 in /srv (this is probably better to be mounted from host, but in
-# my testing the mounting system wasn't playing nice with watch.
+# my testing the mounting from my local system wasn't playing nice with watch). Plus I
+# just want to use this for developing a plugin (which i'll mount locally :))
 RUN  curl -SLO https://github.com/moodlehq/moodlemobile2/archive/v3.1.0.tar.gz && \
 tar -xzf v3.1.0.tar.gz -C /srv --strip-components 1
 WORKDIR /srv/
